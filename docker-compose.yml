@@ -1,0 +1,21 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend #En donde se encuentra el archivo Dockerfile
+    ports:
+      - "4000:4000"  # Mapea el puerto 4000 del contenedor al 4000 de tu máquina
+    volumes:
+      - ./backend:/app  # Monta el código fuente en el contenedor para facilitar el desarrollo
+    environment:
+      - NODE_ENV=production  # Puedes definir variables de entorno aquí si es necesario
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"  # Mapea el puerto 4000 del contenedor al 3000 de tu máquina
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend  # Asegura que el backend se ejecute primero

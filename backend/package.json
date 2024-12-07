@@ -1,0 +1,21 @@
+{
+  "name": "red-social",
+  "version": "1.0.0",
+  "description": "Proyecto de una red social",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "SebastianWebApp"
+  },
+  "author": "Mateo Espinosa",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "2.8.5",
+    "express": "4.21.2"
+  }
+}
