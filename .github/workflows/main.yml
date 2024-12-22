@@ -1,0 +1,33 @@
+name: CI/CD Pipeline for Ejercicio_1
+
+on:
+  push:
+    branches:
+      - main  # Puedes cambiar la rama según sea necesario
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Log in to Docker Hub
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Asegúrate de que los secretos estén configurados
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Build the Docker images using Docker Compose
+      - name: Build and tag Docker images with Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml build
+
+      # Push the Docker images to Docker Hub
+      - name: Push Docker images to DockerHub
+        run: |
+          docker-compose -f docker-compose.yml push
+
+ 
