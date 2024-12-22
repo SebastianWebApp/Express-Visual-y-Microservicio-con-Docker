@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Install Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version  # Verificar la instalación de Docker Compose
+
       # Log in to Docker Hub
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -30,4 +37,4 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml push
 
- 
+  
