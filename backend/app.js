@@ -7,7 +7,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: 'http://localhost:3000', // Solo permitir solicitudes desde este dominio
+  origin: 'http://frontend:3000', // Solo permitir solicitudes desde este dominio
   methods: ['GET', 'POST'], // Solo permitir GET y POST
 })); // Permitir acceso del frontend al backend
 
