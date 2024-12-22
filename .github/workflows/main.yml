@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Ejercicio_1
+name: CI/CD Pipeline for Ejercicio_2
 
 on:
   push:
@@ -36,5 +36,30 @@ jobs:
       - name: Push Docker images to DockerHub
         run: |
           docker-compose -f docker-compose.yml push
+
+
+  deploy-to-ec2:
+      needs: build-and-push
+      runs-on: ubuntu-latest
+      steps:
+        - name: Trigger redeploy on EC2
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.HOST_DNS }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.EC2_SSH_KEY }}
+            script: |
+              docker pull sebastianwebapp/ejercicio_2_backend:latest
+              docker pull sebastianwebapp/ejercicio_2_frontend:latest
+              docker stop my_backend || true
+              docker stop my_frontend || true
+              docker rm my_backend || true
+              docker rm my_frontend || true
+              docker run -d --name my_backend sebastianwebapp/ejercicio_2_backend:latest
+              docker run -d --name my_frontend sebastianwebapp/ejercicio_2_frontend:latest
+              echo "Desplegando en ${{ secrets.HOST_DNS }} con la rama ${{ github.ref_name }}"
+              sleep 10
+              docker ps | grep my_backend || echo "El contenedor backend no está corriendo correctamente"
+              docker ps | grep my_frontend || echo "El contenedor frontend no está corriendo correctamente"
 
   
