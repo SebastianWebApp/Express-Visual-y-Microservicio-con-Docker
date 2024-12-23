@@ -55,3 +55,38 @@ jobs:
 
           # Subir las imágenes a Docker Hub
           docker-compose -f docker-compose.yml push
+
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger redeploy on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Conectando a ${{ secrets.HOST_DNS }} para redeploy"
+
+            # Pull de las imágenes más recientes
+            docker pull sebastianwebapp/ejercicio_2_backend:latest
+            docker pull sebastianwebapp/ejercicio_2_frontend:latest
+
+            # Detener y eliminar contenedores si ya existen
+            docker stop backend_container || true
+            docker rm backend_container || true
+            docker stop frontend_container || true
+            docker rm frontend_container || true
+
+            # Desplegar el backend en el puerto 4000
+            docker run -d --name backend_container -p 4000:4000 sebastianwebapp/ejercicio_2_backend:latest
+
+            # Desplegar el frontend en el puerto 3000
+            docker run -d --name frontend_container -p 3000:3000 sebastianwebapp/ejercicio_2_frontend:latest
+
+            echo "Despliegue completado exitosamente"
+
+            # Verificar si los contenedores están corriendo
+            docker ps | grep backend_container || echo "El contenedor del backend no está corriendo correctamente"
+            docker ps | grep frontend_container || echo "El contenedor del frontend no está corriendo correctamente"
