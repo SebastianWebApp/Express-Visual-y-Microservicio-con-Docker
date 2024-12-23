@@ -1,35 +1,19 @@
-version: '3'
+version: '3.8'
+
 services:
   backend:
+    image: sebastianwebapp/ejercicio_2_backend:latest
     build:
-      context: ./backend  # En donde se encuentra el archivo Dockerfile
-    
-    image: sebastianwebapp/ejercicio_2:latest  # Nombre y etiqueta de la imagen en Docker Hub
-
+      context: ./backend  # Ruta del directorio del backend
+    container_name: my_backend
     ports:
-      - "4000:4000"  # Mapea el puerto 4000 del contenedor al 4000 de tu máquina
-    volumes:
-      - ./backend:/app  # Monta el código fuente en el contenedor para facilitar el desarrollo
-
-    networks:
-      - my_network  # Conectar el backend a la red personalizada
+      - "4000:4000"
 
   frontend:
+    image: sebastianwebapp/ejercicio_2_frontend:latest
     build:
-      context: ./frontend
-    
-    image: sebastianwebapp/ejercicio_2:latest  # Nombre y etiqueta de la imagen en Docker Hub
-
+      context: ./frontend  # Ruta del directorio del frontend
+    container_name: my_frontend
     ports:
-      - "3000:3000"  # Mapea el puerto 3000 del contenedor al 3000 de tu máquina
-    volumes:
-      - ./frontend:/app
-    depends_on:
-      - backend  # Asegura que el backend se ejecute primero
-    networks:
-      - my_network  # Conectar el frontend a la misma red personalizada
-
-networks:
-  my_network:
-    driver: bridge  # Definir la red como una red de puente (bridge)
+      - "3000:3000"
 
