@@ -6,9 +6,7 @@ import userRoutes from './routes/userRoutes.js';
 const app = express();
 
 // Middlewares
-app.use(cors({
-
-})); // Permitir acceso del frontend al backend
+app.use(cors()); // Permitir acceso del frontend al backend
 
 app.use(json()); // Parsear JSON en las solicitudes
 
