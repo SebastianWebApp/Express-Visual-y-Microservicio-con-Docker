@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Ejercicio_2
 on:
   push:
     branches:
-      - main  # Puedes cambiar la rama según sea necesario
+      - main  # Cambia según sea necesario
 
 jobs:
   build-and-push:
@@ -13,11 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install Docker Compose
-      - name: Install Docker Compose
+      # Install Docker and Docker Compose
+      - name: Install Docker and Docker Compose
         run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
+          docker --version  # Verificar la instalación de Docker
           docker-compose --version  # Verificar la instalación de Docker Compose
 
       # Log in to Docker Hub
@@ -27,44 +30,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}  # Asegúrate de que los secretos estén configurados
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build the Docker images using Docker Compose
+      # Build and push Docker images using Docker Compose
       - name: Build and tag Docker images with Docker Compose
         run: |
+          # Construir las imágenes con Docker Compose
           docker-compose -f docker-compose.yml build
 
-      # Push the Docker images to Docker Hub
-      - name: Push Docker images to DockerHub
-        run: |
+          # Subir las imágenes a Docker Hub
           docker-compose -f docker-compose.yml push
 
-
-  deploy-to-ec2:
-      needs: build-and-push
-      runs-on: ubuntu-latest
-      steps:
-        - name: Trigger redeploy on EC2
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.HOST_DNS }}
-            username: ${{ secrets.USERNAME }}
-            key: ${{ secrets.EC2_SSH_KEY }}
-            script: |
-              docker pull sebastianwebapp/ejercicio_2_backend:latest
-              docker pull sebastianwebapp/ejercicio_2_frontend:latest
-              docker stop my_backend || true
-              docker stop my_frontend || true
-              docker rm my_backend || true
-              docker rm my_frontend || true
-              # Ejecutar los contenedores con los puertos mapeados
-              docker run -d --name my_backend -p 4000:4000 sebastianwebapp/ejercicio_2_backend:latest
-              docker run -d --name my_frontend -p 3000:3000 sebastianwebapp/ejercicio_2_frontend:latest
-    
-              echo "Desplegando en ${{ secrets.HOST_DNS }} con la rama ${{ github.ref_name }}"
-    
-              # Esperar un momento para asegurar que los contenedores estén corriendo
-              sleep 10
-    
-              # Verificar si los contenedores están corriendo
-              docker ps | grep my_backend || echo "El contenedor backend no está corriendo correctamente"
-              docker ps | grep my_frontend || echo "El contenedor frontend no está corriendo correctamente"
-      
