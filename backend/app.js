@@ -17,7 +17,8 @@ app.use(json()); // Parsear JSON en las solicitudes
 app.use('/api/usuarios', userRoutes);
 
 // Iniciar servidor
+
 const PORT = 4000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
