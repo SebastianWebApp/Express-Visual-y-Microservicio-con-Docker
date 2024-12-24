@@ -86,19 +86,19 @@ jobs:
               docker network create app-network || true
   
               # Detener y eliminar contenedores antiguos
-              docker stop my_backend || true
-              docker rm my_backend || true
-              docker stop my_frontend || true
-              docker rm my_frontend || true
+              docker stop backend || true
+              docker rm backend || true
+              docker stop frontend || true
+              docker rm frontend || true
   
               # Iniciar el contenedor de Backend
-              docker run -d --name my_backend \
+              docker run -d --name backend \
                 --network app-network \
                 -p 4000:4000 \
                 sebastianwebapp/ejercicio_2_backend:latest
   
               # Iniciar el contenedor de la aplicación con el archivo .env
-              docker run -d --name my_frontend \
+              docker run -d --name frontend \
                 --network app-network \
                 -p 3000:3000 \
                 sebastianwebapp/ejercicio_2_frontend:latest
