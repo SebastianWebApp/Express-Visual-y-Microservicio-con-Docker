@@ -51,9 +51,21 @@ jobs:
             
             # Descargar el archivo docker-compose.yml desde GitHub
             curl -O https://raw.githubusercontent.com/SebastianWebApp/Express-Visual-y-Microservicio-con-Docker/refs/heads/main/docker-compose.yml
+            
+            # Instalar Docker Compose si no está instalado
+            if ! command -v docker-compose &> /dev/null; then
+              echo "Docker Compose no encontrado. Instalando..."
+              sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            else
+              echo "Docker Compose ya está instalado."
+            fi
+            
+            # Verificar la instalación de Docker Compose
+            docker-compose --version
   
             # Iniciar los contenedores con docker-compose
             docker-compose -f docker-compose.yml up -d
-            
+  
             echo "Despliegue completado exitosamente"
             docker ps
