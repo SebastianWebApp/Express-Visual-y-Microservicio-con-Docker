@@ -105,7 +105,7 @@ jobs:
                 --name backend \         # Nombre del contenedor
                 --network app-network \   # Conectar a la red app-network
                 -p 4000:4000 \            # Mapear puerto 4000 (aplicación)
-                sebastianwebapp/ejercicio_2_frontend:latest # Imagen de la aplicación
+                sebastianwebapp/ejercicio_2_backend:latest # Imagen de la aplicación
   
               echo "Despliegue completado exitosamente"
               docker ps
