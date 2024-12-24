@@ -81,7 +81,6 @@ jobs:
               # Descargar las imágenes desde Docker Hub
               docker pull sebastianwebapp/ejercicio_2_backend:latest
               docker pull sebastianwebapp/ejercicio_2_frontend:latest
-
   
               # Detener y eliminar contenedores antiguos
               docker stop backend || true
@@ -91,19 +90,16 @@ jobs:
 
               # Asegurarse de tener la red y volumen creados
               docker network create app-network || true
-  
 
-              # Paso 1: Crear y ejecutar el contenedor de frontendDB
-              docker run -d --name frontend \             # Nombre del contenedor
-                --network app-network \    # Conectar a la red app-network
-                -p 3000:3000 \           # Mapear puerto 3000 (frontendDB)
-                sebastianwebapp/ejercicio_2_frontend:latest               # Imagen de frontendDB más reciente
-  
-              # Paso 2: Crear y ejecutar el contenedor de la aplicación Node.js
-              docker run -d --name backend \         # Nombre del contenedor
-                --network app-network \   # Conectar a la red app-network
-                -p 4000:4000 \            # Mapear puerto 4000 (aplicación)
-                sebastianwebapp/ejercicio_2_backend:latest # Imagen de la aplicación
+              docker run -d --name frontend \
+                --network app-network \
+                -p 3000:3000 \
+                sebastianwebapp/ejercicio_2_frontend:latest
+
+              docker run -d --name backend \
+                --network app-network \
+                -p 4000:4000 \
+                sebastianwebapp/ejercicio_2_backend:latest
   
               echo "Despliegue completado exitosamente"
               docker ps
