@@ -94,15 +94,13 @@ jobs:
   
 
               # Paso 1: Crear y ejecutar el contenedor de frontendDB
-              docker run -d \
-                --name frontend \             # Nombre del contenedor
+              docker run -d --name frontend \             # Nombre del contenedor
                 --network app-network \    # Conectar a la red app-network
                 -p 3000:3000 \           # Mapear puerto 3000 (frontendDB)
                 sebastianwebapp/ejercicio_2_frontend:latest               # Imagen de frontendDB más reciente
   
               # Paso 2: Crear y ejecutar el contenedor de la aplicación Node.js
-              docker run -d \
-                --name backend \         # Nombre del contenedor
+              docker run -d --name backend \         # Nombre del contenedor
                 --network app-network \   # Conectar a la red app-network
                 -p 4000:4000 \            # Mapear puerto 4000 (aplicación)
                 sebastianwebapp/ejercicio_2_backend:latest # Imagen de la aplicación
