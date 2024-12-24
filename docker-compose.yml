@@ -5,7 +5,7 @@ services:
     image: sebastianwebapp/ejercicio_2_backend:latest
     build:
       context: ./backend  # Ruta del directorio del backend
-    container_name: my_backend
+    container_name: backend
     ports:
       - "4000:4000"
     networks:
@@ -15,7 +15,7 @@ services:
     image: sebastianwebapp/ejercicio_2_frontend:latest
     build:
       context: ./frontend  # Ruta del directorio del frontend
-    container_name: my_frontend
+    container_name: frontend
     ports:
       - "3000:3000"
     networks:
