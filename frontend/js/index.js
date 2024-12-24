@@ -1,6 +1,6 @@
 document.getElementById('fetchUsers').addEventListener('click', async () => {
     try {
-      const response = await fetch('http://ec2-54-91-12-8.compute-1.amazonaws.com:4000/api/usuarios');
+      const response = await fetch('http://backend:4000/api/usuarios');
       if (!response.ok) throw new Error('Error al obtener usuarios');
       
       const users = await response.json();
